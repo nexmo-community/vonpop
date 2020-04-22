@@ -66,7 +66,8 @@ app.post("/room/:room/:name", (request, response) => {
         role: "publisher",
         expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60,
         data: `name=${request.params.name}`
-      })
+      }),
+      key: process.env.TOKBOX_KEY
     });
   } else {
     opentok.createSession(
@@ -82,7 +83,8 @@ app.post("/room/:room/:name", (request, response) => {
             role: "publisher",
             expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60,
             data: `name=${request.params.name}`
-          })
+          }),
+          key: process.env.TOKBOX_KEY
         });
       }
     );
