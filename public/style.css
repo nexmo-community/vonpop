@@ -1,1 +1,16 @@
 /* this file is loaded by index.html and styles the page */
+#publisher {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+#subscriber {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#subscriber .OT_publisher .OT_video-element, .OT_subscriber .OT_video-element {
+  width: auto;
+}

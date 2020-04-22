@@ -10,7 +10,7 @@ fetch(window.location.pathname, { method: "POST" })
         "subscriber",
         {
           insertMode: "append",
-          width: "100%",
+          width: "auto",
           height: "100%"
         },
         console.log
@@ -22,8 +22,7 @@ fetch(window.location.pathname, { method: "POST" })
       "publisher",
       {
         insertMode: "append",
-        width: "100%",
-        height: "100%",
+        width: "400px",
         videoSource: 'screen'
       },
       console.log
