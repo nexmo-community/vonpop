@@ -3,28 +3,51 @@ fetch(window.location.pathname, { method: "POST" })
   .then(response => response.json()) // parse the JSON from the server
   .then(response => {
     var session = OT.initSession(response.key, response.sessionId);
+    let name = window.location.pathname.split("/").pop();
 
     session.on("streamCreated", function(event) {
-      session.subscribe(
-        event.stream,
-        "subscriber",
-        {
-          insertMode: "append",
-          width: "auto",
-          height: "100%"
-        },
-        console.log
-      );
+      if (event.stream.videoType == "screen") {
+        session.subscribe(
+          event.stream,
+          "subscriber",
+          {
+            insertMode: "append",
+            width: "auto",
+            height: "100%"
+          },
+          console.log
+        );
+      } else {
+        session.subscribe(
+          event.stream,
+          "publisher",
+          {
+            insertMode: "append",
+            width: "400px"
+          },
+          console.log
+        );
+      }
     });
 
     // Create a publisher
-    var publisher = OT.initPublisher(
+    var screenPublisher = OT.initPublisher(
       "publisher",
       {
         insertMode: "append",
         width: "400px",
-        videoSource: 'screen',
-        name:  window.location.pathname.split("/").pop()
+        videoSource: "screen",
+        name: name
+      },
+      console.log
+    );
+
+    var camPublisher = OT.initPublisher(
+      "publisher",
+      {
+        insertMode: "append",
+        width: "400px",
+        name: name
       },
       console.log
     );
@@ -35,7 +58,8 @@ fetch(window.location.pathname, { method: "POST" })
       if (error) {
         console.log(error);
       } else {
-        session.publish(publisher, console.log);
+        session.publish(screenPublisher, console.log);
+        session.publish(camPublisher, console.log);
       }
     });
   });

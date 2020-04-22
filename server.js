@@ -60,7 +60,7 @@ app.get("/room/:room/:name/screen", (request, response) => {
 
 app.get("/room/:room/:name/cam", (request, response) => {
   // express helps us take JS objects and send them as JSON
-  response.sendFile(__dirname + "/views/screen.html");
+  response.sendFile(__dirname + "/views/cam.html");
 });
 
 app.post("/room/:room/:name/screen", (request, response) => {
