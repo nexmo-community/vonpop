@@ -5,29 +5,9 @@ fetch(window.location.pathname, { method: "POST" })
     var session = OT.initSession(response.key, response.sessionId);
 
     session.on("streamCreated", function(event) {
-      session.subscribe(
-        event.stream,
-        "subscriber",
-        {
-          insertMode: "append",
-          width: "auto",
-          height: "100%"
-        },
-        console.log
-      );
+      console.log(event)
+      if ()
     });
-
-    // Create a publisher
-    var publisher = OT.initPublisher(
-      "publisher",
-      {
-        insertMode: "append",
-        width: "400px",
-        videoSource: 'screen',
-        name:  window.location.pathname.split("/").pop()
-      },
-      console.log
-    );
 
     // Connect to the session
     session.connect(response.token, function(error) {
@@ -35,7 +15,6 @@ fetch(window.location.pathname, { method: "POST" })
       if (error) {
         console.log(error);
       } else {
-        session.publish(publisher, console.log);
       }
     });
   });
