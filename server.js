@@ -5,10 +5,10 @@
 // but feel free to use whatever libraries or frameworks you'd like through `package.json`.
 const express = require("express");
 const app = express();
-const OpenTok = require('opentok');
+const OpenTok = require("opentok");
 const opentok = new OpenTok(process.env.TOKBOX_KEY, process.env.TOKBOX_SECRET);
 
-let sessions = {}
+let sessions = {};
 
 // make all the files in 'public' available
 // https://expressjs.com/en/starter/static-files.html
@@ -25,8 +25,20 @@ app.get("/room/:room", (request, response) => {
 });
 
 app.post("/room/:room", (request, response) => {
-  // express helps us take JS objects and send them as JSON
-  
+  if (sessions[request.params.room]) {
+    response.json({ sessionId: sessions[request.params.room] });
+  } else {
+    opentok.createSession(
+      { mediaMode: "routed", archiveMode: "always" },
+      (err, session) => {
+        if (err) return console.log(err);
+
+        // save the sessionId
+        sessions[request.params.room] = session.sessionId;
+        response.json({ sessionId: sessions[request.params.room] });
+      }
+    );
+  }
 });
 
 app.get("/room/:room/:name", (request, response) => {
