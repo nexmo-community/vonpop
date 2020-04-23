@@ -4,6 +4,7 @@ fetch(window.location.pathname, { method: "POST" })
   .then(response => {
     var session = OT.initSession(response.key, response.sessionId);
     let name = window.location.pathname.split("/").pop();
+    let subscriber = document.getElementById("subscriber");
 
     session.on("streamCreated", function(event) {
       if (event.stream.videoType == "screen") {
@@ -25,7 +26,13 @@ fetch(window.location.pathname, { method: "POST" })
             insertMode: "append",
             width: "400px"
           },
-          console.log
+          error => {
+            if (error) {
+              console.log(error.message);
+            } else {
+              console.log("Subscribed to stream: " + event.stream.name);
+            }
+          }
         );
       }
     });
