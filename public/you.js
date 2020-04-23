@@ -4,9 +4,20 @@ fetch(window.location.pathname, { method: "POST" })
   .then(response => {
     var session = OT.initSession(response.key, response.sessionId);
     let name = window.location.pathname.split("/").pop();
-    let subscriber = document.getElementById("subscriber");
 
     session.on("streamCreated", function(event) {
+      let names = document.querySelectorAll(".OT_name")
+      names.forEach((nameElement) => {
+        if (nameElement.innerHTML == event.stream.name) {
+          let path = window.location.href.split("/");
+          path[path.length-1] = event.stream.name;
+          if (event.stream.videoType == "screen") {
+            path.push()
+          }
+          nameElement.innerHTML = `${event.stream.name} - <a href="" target="_blank"> </a>`
+        }
+      })
+      
       if (event.stream.videoType == "screen") {
         session.subscribe(
           event.stream,
@@ -26,13 +37,7 @@ fetch(window.location.pathname, { method: "POST" })
             insertMode: "append",
             width: "400px"
           },
-          error => {
-            if (error) {
-              console.log(error.message);
-            } else {
-              console.log("Subscribed to stream: " + event.stream.name);
-            }
-          }
+          console.log
         );
       }
     });
