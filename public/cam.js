@@ -5,7 +5,7 @@ fetch(window.location.pathname, { method: "POST" })
     var session = OT.initSession(response.key, response.sessionId);
 
     session.on("streamCreated", (event) => {
-      if (event.stream.name == window.location.pathname.split("/")[3] && event.stream.videoType != "screen") {
+      if (event.stream.name.split("-")[0].trim() == window.location.pathname.split("/")[3] && event.stream.videoType != "screen") {
         session.subscribe(
           event.stream,
           "subscriber",
