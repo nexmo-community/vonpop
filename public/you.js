@@ -6,18 +6,6 @@ fetch(window.location.pathname, { method: "POST" })
     let name = window.location.pathname.split("/").pop();
 
     session.on("streamCreated", function(event) {
-      let names = document.querySelectorAll(".OT_name")
-      names.forEach((nameElement) => {
-        if (nameElement.innerHTML == event.stream.name) {
-          let path = window.location.href.split("/");
-          path[path.length-1] = event.stream.name;
-          if (event.stream.videoType == "screen") {
-            path.push()
-          }
-          nameElement.innerHTML = `${event.stream.name} - <a href="" target="_blank"> </a>`
-        }
-      })
-      
       if (event.stream.videoType == "screen") {
         session.subscribe(
           event.stream,
@@ -27,7 +15,21 @@ fetch(window.location.pathname, { method: "POST" })
             width: "auto",
             height: "100%"
           },
-          console.log
+          error => {
+            let names = document.querySelectorAll(".OT_name");
+            names.forEach(nameElement => {
+              if (nameElement.innerHTML == event.stream.name) {
+                let path = window.location.href.split("/");
+                path[path.length - 1] = event.stream.name;
+                path.push("screen");
+                nameElement.innerHTML = `${
+                  event.stream.name
+                } - <a href="${path.join("/")}" target="_blank">${path.join(
+                  "/"
+                )}</a>`;
+              }
+            });
+          }
         );
       } else {
         session.subscribe(
@@ -37,7 +39,21 @@ fetch(window.location.pathname, { method: "POST" })
             insertMode: "append",
             width: "400px"
           },
-          console.log
+          error => {
+            let names = document.querySelectorAll(".OT_name");
+            names.forEach(nameElement => {
+              if (nameElement.innerHTML == event.stream.name) {
+                let path = window.location.href.split("/");
+                path[path.length - 1] = event.stream.name;
+                path.push("cam");
+                nameElement.innerHTML = `${
+                  event.stream.name
+                } - <a href="${path.join("/")}" target="_blank">${path.join(
+                  "/"
+                )}</a>`;
+              }
+            });
+          }
         );
       }
     });
@@ -70,7 +86,21 @@ fetch(window.location.pathname, { method: "POST" })
       if (error) {
         console.log(error);
       } else {
-        session.publish(screenPublisher, console.log);
+        session.publish(screenPublisher, error => {
+            let names = document.querySelectorAll(".OT_name");
+            names.forEach(nameElement => {
+              if (nameElement.innerHTML == screenPublisher.stream.name) {
+                let path = window.location.href.split("/");
+                path[path.length - 1] = screenPublisher.stream.name;
+                path.push("screen");
+                nameElement.innerHTML = `${
+                  event.stream.name
+                } - <a href="${path.join("/")}" target="_blank">${path.join(
+                  "/"
+                )}</a>`;
+              }
+            });
+          });
         session.publish(camPublisher, console.log);
       }
     });
