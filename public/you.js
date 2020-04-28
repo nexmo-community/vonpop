@@ -127,7 +127,8 @@ fetch(window.location.pathname, { method: "POST" })
         width: "400px",
         name: `${name} - <a href="${window.location.pathname}/cam" target="_blank">${window.location.pathname}/cam</a>`,
         audioSource: audioDevices[0].deviceId,
-        videoSource: videoDevices[0].deviceId
+        publishVideo: false,
+        videoSource: null
       },
       console.log
     );
