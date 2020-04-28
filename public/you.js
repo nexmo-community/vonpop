@@ -97,7 +97,19 @@ fetch(window.location.pathname, { method: "POST" })
     });
 
     // Create a publisher
-    var screenPublisher = OT.initPublisher(
+    
+      
+    OT.getDevices((err, devices)=> {
+      if (err) console.log(err)
+      let audioDevices = devices.filter(device => {
+        return device.kind == "audioInput"
+      })
+      
+      let videoDevices = devices.filter(device => {
+        return device.kind == "videoInput"
+      })
+      
+      var screenPublisher = OT.initPublisher(
       "publisher",
       {
         insertMode: "append",
@@ -108,7 +120,28 @@ fetch(window.location.pathname, { method: "POST" })
       console.log
     );
       
+      var audioPublisher = OT.initPublisher(
+      "publisher",
+      {
+        insertMode: "append",
+        width: "400px",
+        name: `${name} - <a href="${window.location.pathname}/cam" target="_blank">${window.location.pathname}/cam</a>`,
+        audioSource: audioDevices[0].deviceId,
+        videoSource: videoDevices[0].deviceId
+      },
+      console.log
+    );
       
+      session.connect(response.token, function(error) {
+      // If the connection is successful, initialize a publisher and publish to the session
+      if (error) {
+        console.log(error);
+      } else {
+        session.publish(screenPublisher, console.log);
+        session.publish(audioPublisher, console.log);
+      }
+    });
+    })
 
     var audioPublisher = OT.initPublisher(
       "publisher",
@@ -121,14 +154,6 @@ fetch(window.location.pathname, { method: "POST" })
     );
 
     // Connect to the session
-    session.connect(response.token, function(error) {
-      // If the connection is successful, initialize a publisher and publish to the session
-      if (error) {
-        console.log(error);
-      } else {
-        session.publish(screenPublisher, console.log);
-        session.publish(audioPublisher, console.log);
-      }
-    });
+    
     })
   });
