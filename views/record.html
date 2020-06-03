@@ -3,15 +3,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Welcome to Glitch!</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A cool thing made with Glitch">
-    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A cool thing made with Glitch" />
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"
+    />
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/record.css">
+    <link rel="stylesheet" href="/record.css" />
     <link
       href="https://unpkg.com/@vonagevolta/volta2@0.0.47/dist/css/volta.css"
       rel="stylesheet"
@@ -21,5 +26,12 @@
     <script src="/record.js" defer></script>
   </head>
   <body>
+    <div id="subscriber"></div>
+    <div id="publisher">
+      <button id="start">
+        Start
+      </button>
+    </div>
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
   </body>
 </html>
