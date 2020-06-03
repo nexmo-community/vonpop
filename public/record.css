@@ -8,7 +8,7 @@ body {
 }
 
 .left-card,
-.selected * {
+.selected *, .video-recorder .status {
   color: white;
 }
 
@@ -39,3 +39,16 @@ body {
   padding-left: 24px;
   padding-right: 24px;
 }
+
+.video-recorder .Vlt-btn-group {
+  height: 0;
+}
+
+.video-recorder .status {
+  line-height: 48px;
+}
+
+.video-recorder .status span {
+  padding-right: 16px;
+}
+
