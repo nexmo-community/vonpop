@@ -48,6 +48,10 @@ body {
   line-height: 48px;
 }
 
+.video-recorder .Vlt-col {
+  height: 48px;
+}
+
 .video-recorder .status span {
   padding-right: 16px;
 }
