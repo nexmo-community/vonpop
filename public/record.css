@@ -2,10 +2,16 @@
   margin: 0 auto;
 }
 
+.left-card, .selected * {
+   color: white;
+}
+
+.not-selected {
+  background-color: white;
+}
+
 .left-card {
   height: 581px;
-  
-  color: white;
 }
 
 .Vlt-card.Vlt-grid {
