@@ -7,3 +7,7 @@
   
   color: white;
 }
+
+.Vlt-card.Vlt-grid {
+  display: flex;
+}
