@@ -19,16 +19,16 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
-app.get("/room/:room", (request, response) => {
+app.get("/record/:id", (request, response) => {
   // express helps us take JS objects and send them as JSON
-  response.sendFile(__dirname + "/views/room.html");
+  response.sendFile(__dirname + "/views/record.html");
 });
 
-app.post("/room/:room", (request, response) => {
-  if (sessions[request.params.room]) {
+app.post("/record/:id", (request, response) => {
+  if (sessions[request.params.id]) {
     response.json({
-      sessionId: sessions[request.params.room],
-      token: opentok.generateToken(sessions[request.params.room], {
+      sessionId: sessions[request.params.id],
+      token: opentok.generateToken(sessions[request.params.id], {
         role: "subscriber",
         expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60 // in one week
       })
@@ -40,9 +40,9 @@ app.post("/room/:room", (request, response) => {
         if (err) return console.log(err);
 
         // save the sessionId
-        sessions[request.params.room] = session.sessionId;
+        sessions[request.params.id] = session.sessionId;
         response.json({
-          sessionId: sessions[request.params.room],
+          sessionId: sessions[request.params.id],
           token: session.generateToken({
             role: "subscriber",
             expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60 // in one week
