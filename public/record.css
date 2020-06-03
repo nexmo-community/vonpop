@@ -1,3 +1,9 @@
 .Vlt-container {
   margin: 0 auto;
 }
+
+.left-card {
+  height: 581px;
+  
+  color: white;
+}
