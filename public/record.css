@@ -1,12 +1,17 @@
+body {
+  background-color: #242729;
+}
+
 .Vlt-container {
   margin: 0 auto;
+  padding-top: 50px;
 }
 
 .left-card, .selected * {
    color: white;
 }
 
-.not-selected {
+.Vlt-card__header.not-selected {
   background-color: white;
 }
 
@@ -16,4 +21,18 @@
 
 .Vlt-card.Vlt-grid {
   display: flex;
+  padding: 0;
+}
+
+.Vlt-card__header {
+  height: 48px;
+}
+
+.Vlt-card__content.not-selected {
+  display: none;
+}
+
+.Vlt-card__content {
+  padding-left: 24px;
+  padding-right: 24px;
 }
