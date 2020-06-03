@@ -35,7 +35,7 @@ app.post("/record/:id", (request, response) => {
     });
   } else {
     opentok.createSession(
-      { mediaMode: "routed", archiveMode: "always" },
+      { mediaMode: "routed"},
       (err, session) => {
         if (err) return console.log(err);
 
@@ -50,6 +50,29 @@ app.post("/record/:id", (request, response) => {
         });
       }
     );
+  }
+});
+
+app.post("/record/:id/start", (request, response) => {
+  if (sessions[request.params.id]) {
+    opentok.startArchive(sessions[request.params.id], {
+    name: 'Node Archiving Sample App',
+    hasAudio: hasAudio,
+    hasVideo: hasVideo,
+    outputMode: outputMode,
+  }, function(err, archive) {
+    if (err) return res.send(500,
+      'Could not start archive for session '+sessionId+'. error='+err.message
+    );
+    res.json(archive);
+  });
+    response.json({
+      sessionId: sessions[request.params.id],
+      token: opentok.generateToken(sessions[request.params.id], {
+        role: "subscriber",
+        expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60 // in one week
+      })
+    });
   }
 });
 

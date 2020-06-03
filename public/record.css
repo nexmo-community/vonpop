@@ -9,7 +9,7 @@ body {
 
 .left-card,
 .selected *,
-.video-recorder .status {
+.video-recorder .status, .video-recorder .Vlt-card * {
   color: white;
 }
 
@@ -56,6 +56,8 @@ body {
 .video-recorder .Vlt-card {
   max-height: 517px;
   padding: 40px;
+  height: 100%;
+  text-align: center;
 }
 
 .video-recorder .status span {

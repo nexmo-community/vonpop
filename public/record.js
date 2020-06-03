@@ -4,6 +4,7 @@ fetch(window.location.pathname, { method: "POST" })
   .then(response => {
     let start = document.getElementById("start");
     start.addEventListener("click", () => {
+      document.getElementById("publisher").innerHTML = "";
       var session = OT.initSession(response.key, response.sessionId);
       let name = window.location.pathname.split("/").pop();
 
@@ -13,7 +14,7 @@ fetch(window.location.pathname, { method: "POST" })
           "publisher",
           {
             insertMode: "append",
-            width: "400px"
+            width: "100%"
           },
           console.log
         );
@@ -25,8 +26,9 @@ fetch(window.location.pathname, { method: "POST" })
         "publisher",
         {
           insertMode: "append",
-          width: "400px",
-          name: `${name} - <a href="${window.location.pathname}/cam" target="_blank">${window.location.pathname}/cam</a>`
+          width: "100%",
+          height: "100%",
+          name: ""
         },
         console.log
       );
