@@ -1,8 +1,6 @@
-// server.js
-// where your node app starts
+const dotenv = require("dotenv");
+dotenv.config();
 
-// we've started you off with Express (https://expressjs.com/)
-// but feel free to use whatever libraries or frameworks you'd like through `package.json`.
 const express = require("express");
 const app = express();
 const OpenTok = require("opentok");
@@ -27,9 +25,10 @@ app.get("/record/:id", (request, response) => {
 app.post("/record/:id", (request, response) => {
   if (sessions[request.params.id]) {
     response.json({
+      key: process.env.TOKBOX_KEY,
       sessionId: sessions[request.params.id],
       token: opentok.generateToken(sessions[request.params.id], {
-        role: "subscriber",
+        role: "publisher",
         expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60 // in one week
       })
     });
@@ -40,9 +39,10 @@ app.post("/record/:id", (request, response) => {
       // save the sessionId
       sessions[request.params.id] = session.sessionId;
       response.json({
+        key: process.env.TOKBOX_KEY,
         sessionId: sessions[request.params.id],
         token: session.generateToken({
-          role: "subscriber",
+          role: "publisher",
           expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60 // in one week
         })
       });
