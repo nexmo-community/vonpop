@@ -1,81 +1,160 @@
-<!-- This is a static file -->
-<!-- served from your routes in server.js -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Welcome to Glitch!</title>
+    <title>Welcome to VonPop!</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A cool thing made with Glitch" />
-    <link
-      id="favicon"
-      rel="icon"
-      href="https://glitch.com/edit/favicon-app.ico"
-      type="image/x-icon"
-    />
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/index.css" />
     <link
-      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      href="https://unpkg.com/@vonagevolta/volta2@0.0.47/dist/css/volta.css"
       rel="stylesheet"
     />
     <!-- import the webpage's client-side javascript file -->
     <script src="/index.js" defer></script>
   </head>
-  <body class="font-mono bg-gray-400">
-		<!-- Container -->
-		<div class="container mx-auto">
-			<div class="flex justify-center px-6 my-12">
-				<!-- Row -->
-				<div class="w-full xl:w-3/4 lg:w-11/12 flex">
-					<!-- Col -->
-					<div
-						class="w-full h-auto bg-gray-400 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg"
-						style="background-image: url('https://source.unsplash.com/oWTW-jNGl9I/600x800')"
-					></div>
-					<!-- Col -->
-					<div class="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
-						<div class="px-8 mb-4 text-center">
-							<h3 class="pt-4 mb-2 text-2xl">Ready to Stream?</h3>
-						</div>
-						<form class="px-8 pt-6 pb-4 mb-0 bg-white rounded" id="login">
-							<div class="mb-4">
-								<label class="block mb-2 text-sm font-bold text-gray-700" for="email">
-									Room
-								</label>
-								<input
-									class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-									id="room"
-                  name="room"
-									type="text"
-									placeholder="Enter a Room Name..."
-								/>
-							</div>
-							<div class="mb-4">
-								<label class="block mb-2 text-sm font-bold text-gray-700" for="email">
-									Name
-								</label>
-								<input
-									class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-									id="you"
-                  name="you"
-									type="text"
-									placeholder="Enter Your Name..."
-								/>
-							</div>
-              <div class="text-center">
-								<button class="w-full mt-10 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700 focus:outline-none focus:shadow-outline">
-                  Speak Friend and Enter
-                </button>
-							</div>
-						</form>
-					</div>
+  <body>
+    <div class="Vlt-container" style="margin: 20px auto; background-color: #f5f5f5; padding: 5px;">
+			<div class="Vlt-grid">
+				<div class="Vlt-col Vlt-col--2of3 Vlt-left">
+					<span style="font-size: 3em;">vonpop</span> 
+					<a class="Vlt-black" style="margin-left: 20px;" href="">How it works</a>
+					<a class="Vlt-black" style="margin-left: 20px;" href="">How to prepare for a voxpop</a>
+					<a class="Vlt-black" style="margin-left: 20px;" href="">About Vonage</a>
+				</div>
+				<div class="Vlt-col Vlt-right">
+          <button id="authorize_button" class="Vlt-btn Vlt-btn--destructive" style="display: none; margin-right: 10px;">Authorize</button>
+          <a href="/record/test" id="record_button" class="Vlt-btn Vlt-btn--primary" style="display: none; margin-right: 10px;">Record</a>
+    			<button id="signout_button" class="Vlt-btn Vlt-btn--destructive" style="display: none; margin-right: 10px;">Sign Out</button>
+				</div>
+			</div>
+			<div class="Vlt-grid">
+				<div class="Vlt-col">
+					<img src="/homepage.jpg">
 				</div>
 			</div>
 		</div>
-    <div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>
-    <script src="https://button.glitch.me/button.js"></script>
+    <pre id="content" style="white-space: pre-wrap;"></pre>
+		
+    <script type="text/javascript">
+    
+      // Client ID and API key from the Developer Console
+      var CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+      var API_KEY = process.env.GOOGLE_API_KEY;
+
+      // Array of API discovery doc URLs for APIs used by the quickstart
+      var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+
+      // Authorization scopes required by the API; multiple scopes can be
+      // included, separated by spaces.
+      var SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+
+      var authorizeButton = document.getElementById('authorize_button');
+      var signoutButton = document.getElementById('signout_button');
+      var recordButton = document.getElementById('record_button');
+
+      /**
+       *  On load, called to load the auth2 library and API client library.
+       */
+      function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+      }
+
+      /**
+       *  Initializes the API client library and sets up sign-in state
+       *  listeners.
+       */
+      function initClient() {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: DISCOVERY_DOCS,
+          scope: SCOPES
+        }).then(function () {
+          // Listen for sign-in state changes.
+          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+          // Handle the initial sign-in state.
+          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          authorizeButton.onclick = handleAuthClick;
+          signoutButton.onclick = handleSignoutClick;
+        }, function(error) {
+          appendPre(JSON.stringify(error, null, 2));
+        });
+      }
+
+      /**
+       *  Called when the signed in status changes, to update the UI
+       *  appropriately. After a sign-in, the API is called.
+       */
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          authorizeButton.style.display = 'none';
+          recordButton.style.display = 'block';
+          signoutButton.style.display = 'block';
+          //listFiles();
+        } else {
+          authorizeButton.style.display = 'block';
+          recordButton.style.display = 'none';
+          signoutButton.style.display = 'none';
+        }
+      }
+
+      /**
+       *  Sign in the user upon button click.
+       */
+      function handleAuthClick(event) {
+        gapi.auth2.getAuthInstance().signIn();
+      }
+
+      /**
+       *  Sign out the user upon button click.
+       */
+      function handleSignoutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+
+      /**
+       * Append a pre element to the body containing the given message
+       * as its text node. Used to display the results of the API call.
+       *
+       * @param {string} message Text to be placed in pre element.
+       */
+      function appendPre(message) {
+        var pre = document.getElementById('content');
+        var textContent = document.createTextNode(message + '\n');
+        pre.appendChild(textContent);
+      }
+
+      /**
+       * Print files.
+       */
+      function listFiles() {
+        gapi.client.drive.files.list({
+          'pageSize': 10,
+          'fields': "nextPageToken, files(id, name)"
+        }).then(function(response) {
+          appendPre('Files:');
+          var files = response.result.files;
+          if (files && files.length > 0) {
+            for (var i = 0; i < files.length; i++) {
+              var file = files[i];
+              appendPre(file.name + ' (' + file.id + ')');
+            }
+          } else {
+            appendPre('No files found.');
+          }
+        });
+      }
+
+    </script>
+
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+
   </body>
 </html>
